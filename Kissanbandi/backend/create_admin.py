@@ -2,7 +2,7 @@ import requests
 import json
 
 def create_admin():
-    url = "https://bogat.onrender.com/api/users/create-first-admin"
+    url = "https://sribogat.ark.webstorlabs.com//api/users/create-first-admin"
     
     headers = {
         "Content-Type": "application/json",

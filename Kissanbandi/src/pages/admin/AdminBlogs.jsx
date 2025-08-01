@@ -38,8 +38,8 @@ const AdminBlogs = () => {
  });
 
  // API Base URL - Update this to match your backend
- const API_BASE_URL ='https://bogat.onrender.com/api';
- 
+ const API_BASE_URL =import.meta.env.VITE_API_URL;
+ const BASE_URL = import.meta.env.VITE_BASE_URL;
  // Helper function to get auth headers
  const getAuthHeaders = () => {
    const token = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken');
@@ -304,14 +304,14 @@ const AdminBlogs = () => {
    
    if (imagePath.includes('uploads/blog/') || imagePath.includes('uploads\\blog\\')) {
      const filename = imagePath.split(/[/\\]/).pop();
-     return `https://bogat.onrender.com/uploads/blog/${filename}`;
+     return `${BASE_URL}/uploads/blog/${filename}`;
    }
    
    if (!imagePath.includes('/') && !imagePath.includes('\\')) {
-     return `https://bogat.onrender.com/uploads/blog/${imagePath}`;
+     return `${BASE_URL}/uploads/blog/${imagePath}`;
    }
    
-   return `https://bogat.onrender.com/${imagePath}`;
+   return `${BASE_URL}/${imagePath}`;
  };
 
  const addTag = () => {

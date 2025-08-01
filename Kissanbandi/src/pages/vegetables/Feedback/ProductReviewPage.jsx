@@ -24,16 +24,19 @@ const ProductReviewPage = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [uploadError, setUploadError] = useState('');
 
+  const API_BASE =import.meta.env.VITE_API_URL ;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  
   // API URL helper - same as VerifiedReviewsSection
   const getApiUrl = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const nodeEnv = import.meta.env.VITE_NODE_ENV;
     
     if (nodeEnv === 'production') {
-      return 'https://bogat.onrender.com/api';
+      return `${API_BASE}`;
     }
     
-    return apiUrl || 'https://bogat.onrender.com/api';
+    return apiUrl || `${API_BASE}`;
   };
 
   // Redirect to login if not authenticated

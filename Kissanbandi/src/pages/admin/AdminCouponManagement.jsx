@@ -60,7 +60,8 @@ const AdminCouponManagement = () => {
   const [errors, setErrors] = useState({});
 
   // API Base URL - Update this to match your backend
-  const API_BASE_URL = 'https://bogat.onrender.com/api/coupons';
+  const API_BASE_URL = `${import.meta.env.VITE_API_URL}/coupons`;
+
 
   // Get auth token from sessionStorage or your auth context
   const getAuthToken = () => {

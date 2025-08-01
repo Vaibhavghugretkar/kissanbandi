@@ -221,7 +221,8 @@ const ProductDetailPage = () => {
     const gstRate = product.gst || 18;
     const gstAmount = (basePrice * gstRate) / 100;
     const totalPrice = basePrice + gstAmount;
-    
+    const API_BASE =import.meta.env.VITE_API_URL ;
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
     return {
       basePrice,
       gstRate,
@@ -243,12 +244,12 @@ const ProductDetailPage = () => {
     
     // If it starts with /uploads, use it directly with your backend
     if (imagePath.startsWith('/uploads')) {
-      return `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://bogat.onrender.com'}${imagePath}`;
+      return `${import.meta.env.VITE_API_URL?.replace('/api', '') || `${BASE_URL}`}${imagePath}`;
     }
     
     // If it's just a filename, put it in product folder
     const filename = imagePath.split('/').pop();
-    return `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://bogat.onrender.com'}/uploads/product/${filename}`;
+    return `${import.meta.env.VITE_API_URL?.replace('/api', '') || `${BASE_URL}`}/uploads/product/${filename}`;
   }, []);
 
   // Enhanced getProductImages function

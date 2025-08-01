@@ -15,14 +15,14 @@ const STATUS_COLORS = {
 };
 
 const FALLBACK_IMAGE = '/images/product-placeholder.jpg';
-
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 // Helper function to check the image path
 const getProductImage = (imagePath) => {
     if (!imagePath) return FALLBACK_IMAGE;
     if (imagePath.startsWith('http')) return imagePath;
-    if (imagePath.startsWith('/uploads')) return `https://bogat.onrender.com${imagePath}`;
+    if (imagePath.startsWith('/uploads')) return `${BASE_URL}${imagePath}`;
     const filename = imagePath.split('/').pop();
-    return `https://bogat.onrender.com/uploads/product/${filename}`;
+    return `${BASE_URL}/uploads/product/${filename}`;
 };
 
 

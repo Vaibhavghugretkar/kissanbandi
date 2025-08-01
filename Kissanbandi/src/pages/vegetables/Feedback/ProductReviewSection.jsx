@@ -18,6 +18,8 @@ const VerifiedReviewsSection = ({ productId = null, showProductInfo = false }) =
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const BASE_URL = import.meta.env.VITE_API_URL 
+
   // ✅ FIXED: Enhanced API URL handling
   const getApiUrl = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -30,10 +32,10 @@ const VerifiedReviewsSection = ({ productId = null, showProductInfo = false }) =
     });
     
     if (nodeEnv === 'production') {
-      return 'https://bogat.onrender.com/api';
+      return `${BASE_URL}`;
     }
     
-    return apiUrl || 'https://bogat.onrender.com/api';
+    return apiUrl || `${BASE_URL}`;
   };
 
   // ✅ FIXED: Updated image URL handling for Cloudinary

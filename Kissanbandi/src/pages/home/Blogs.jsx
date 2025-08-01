@@ -24,7 +24,8 @@ const Blogs = () => {
   };
 
   // API Base URL
-  const API_BASE_URL ='https://bogat.onrender.com/api';
+  const API_BASE =import.meta.env.VITE_API_URL ;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // Fetch latest published blogs for homepage preview
   useEffect(() => {

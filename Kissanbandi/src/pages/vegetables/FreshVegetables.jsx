@@ -14,6 +14,10 @@ const BogatProducts = () => {
   const [wishlist, setWishlist] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const API_BASE =import.meta.env.VITE_API_URL ;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 
   // Auth context
   const auth = useAuth();
@@ -69,13 +73,9 @@ const BogatProducts = () => {
     if (!imageUrl) {
       return 'https://via.placeholder.com/300x200/f3f4f6/9ca3af?text=No+Image';
     }
-
-    // Your backend serves from: app.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
-    // Your database has: "/uploads/product/filename.jpg"
-    // So the URL should be: "https://bogat.onrender.com/uploads/product/filename.jpg"
     
     if (imageUrl.startsWith('/uploads')) {
-      return `https://bogat.onrender.com${imageUrl}`;
+      return `${BASE_URL}${imageUrl}`;
     }
 
     // If it's already a full URL, use as is
@@ -84,7 +84,7 @@ const BogatProducts = () => {
     }
 
     // Default fallback
-    return `https://bogat.onrender.com/uploads/product/${imageUrl}`;
+    return `${BASE_URL}/uploads/product/${imageUrl}`;
   };
 
   // Enhanced debugging with file system check

@@ -32,7 +32,8 @@ const BlogDetail = () => {
   const [showShareMenu, setShowShareMenu] = useState(false);
 
   // API Base URL
-  const API_BASE_URL =  'https://bogat.onrender.com/api';
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // Fetch blog details
   useEffect(() => {
@@ -104,20 +105,20 @@ const BlogDetail = () => {
     // If it's a local file path with full system path, extract filename
     if (imagePath.includes('uploads/blog/') || imagePath.includes('uploads\\blog\\')) {
       const filename = imagePath.split(/[/\\]/).pop(); // Handle both / and \ separators
-      const imageUrl = `https://bogat.onrender.com/uploads/blog/${filename}`;
+      const imageUrl = `${BASE_URL}/uploads/blog/${filename}`;
       console.log('Converted image URL:', imageUrl); // Debug log
       return imageUrl;
     }
     
     // If it's just a filename, construct full URL
     if (!imagePath.includes('/') && !imagePath.includes('\\')) {
-      const imageUrl = `https://bogat.onrender.com/uploads/blog/${imagePath}`;
+      const imageUrl = `${BASE_URL}/uploads/blog/${imagePath}`;
       console.log('Filename to URL:', imageUrl); // Debug log
       return imageUrl;
     }
     
     // Default case - assume it's a relative path
-    const imageUrl = `https://bogat.onrender.com/${imagePath}`;
+    const imageUrl = `${BASE_URL}/${imagePath}`;
     console.log('Default case URL:', imageUrl); // Debug log
     return imageUrl;
   };

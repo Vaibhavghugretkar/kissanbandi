@@ -5,6 +5,8 @@ import CategoryManagementModal from './CategoryManagement';
 import { toast } from 'react-hot-toast';
 import { productsApi } from '../../services/api';
 
+
+
 const ProductsManagement = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -23,6 +25,10 @@ const ProductsManagement = () => {
   const [selectedProductImages, setSelectedProductImages] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const API_BASE =import.meta.env.VITE_API_URL ;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+
   // ✅ FIXED: Image processing functions
   const getProductImage = (imagePath) => {
     if (!imagePath) {
@@ -34,11 +40,11 @@ const ProductsManagement = () => {
     }
     
     if (imagePath.startsWith('/uploads')) {
-      return `https://bogat.onrender.com${imagePath}`;
+      return `${BASE_URL}${imagePath}`;
     }
     
     const filename = imagePath.split('/').pop();
-    return `https://bogat.onrender.com/uploads/product/${filename}`;
+    return `${BASE_URL}/uploads/product/${filename}`;
   };
 
   const getProductImages = (product) => {
@@ -122,7 +128,7 @@ const ProductsManagement = () => {
   const loadCategories = async () => {
     try {
       setCategoriesLoading(true);
-      const response = await fetch('https://bogat.onrender.com/api/categories');
+      const response = await fetch(`${API_BASE}/categories`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

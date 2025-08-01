@@ -313,6 +313,7 @@ const getIndividualProductGST = (item, orderData) => {
       const itemsSubtotal = (orderData.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
       const couponDiscount = orderData.discount || 0;
       const couponCode = orderData.couponCode || null;
+      const couponDetails = orderData.couponDetails || null;
       const subtotalAfterDiscount = itemsSubtotal - couponDiscount;
       const gstBreakdown = calculateGSTBreakdown(orderData, subtotalAfterDiscount);
       const shipping = orderData.shippingCharge || (orderData.shippingAddress ? (subtotalAfterDiscount >= 500 ? 0 : 50) : 0);

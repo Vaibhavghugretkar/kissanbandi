@@ -100,19 +100,6 @@ const Analytics = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            {/* Date Range Picker */}
-            <div className="flex items-center space-x-2">
-              <Calendar className="w-5 h-5 text-amber-500" />
-              <DatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update) => setDateRange(update)}
-                className="px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white"
-                placeholderText="Select date range"
-              />
-            </div>
-
             {/* Reset Button */}
             <button
               onClick={() => {

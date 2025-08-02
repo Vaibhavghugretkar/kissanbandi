@@ -1118,6 +1118,7 @@ try {
     const handleRefresh = () => {
         setRefreshKey(prev => prev + 1);
         setOrdersLoaded(false);
+         window.location.reload();
         toast.success('Refreshing orders...');
     };
 

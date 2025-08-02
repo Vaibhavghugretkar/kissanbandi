@@ -81,7 +81,7 @@ const ResetPassword = () => {
                 You can now sign in with your new password
               </p>
               <Link
-                to="/admin/login"
+                to="/login"
                 className="inline-flex items-center justify-center w-full py-2 sm:py-3 px-4 border border-transparent text-sm sm:text-base font-medium rounded-md text-white bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-700 hover:to-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 Sign in with new password

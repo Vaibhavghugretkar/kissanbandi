@@ -16,8 +16,10 @@ import {
   Home,
   FileText,
   Truck,
-  User
+  User,
+  ArrowLeft
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function RefundPolicy() {
   const [expandedSection, setExpandedSection] = useState(null);
@@ -121,35 +123,40 @@ Hassan Karnataka 573201`,
   return (
     <>
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-      {/* Header */}
-      
-
       {/* Hero Section */}
-      <section className="relative py-12 bg-gradient-to-r from-amber-100 to-orange-100 overflow-hidden">
-        {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" fill=\"%23D2691E\" opacity=\"0.1\"><circle cx=\"20\" cy=\"20\" r=\"2\"/><circle cx=\"80\" cy=\"20\" r=\"2\"/><circle cx=\"20\" cy=\"80\" r=\"2\"/><circle cx=\"80\" cy=\"80\" r=\"2\"/><circle cx=\"50\" cy=\"50\" r=\"2\"/></svg>')] opacity-20"></div> */}
+      <section className="relative py-8 md:py-12 bg-gradient-to-r from-amber-100 to-orange-100 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
+          <Link to={"/"}>
+          <button 
+            className="flex items-center space-x-2 px-3 md:px-4 py-2 bg-amber-100 hover:bg-amber-200 rounded-lg border border-amber-300 transition-all duration-200 hover:shadow-md group mb-6 md:mb-8"
+          >
+            <ArrowLeft className="w-4 h-4 text-amber-700 group-hover:translate-x-[-2px] transition-transform" />
+            <Home className="w-4 h-4 text-amber-700" />
+            <span className="text-amber-800 font-medium text-sm md:text-base">Back to Home</span>
+          </button>
+          </Link>
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center space-x-2 bg-amber-200/50 rounded-full px-6 py-2 mb-6">
+                        <div className="inline-flex items-center space-x-2 bg-amber-200/50 rounded-full px-4 md:px-6 py-2 mb-4 md:mb-6">
               <FileText className="w-4 h-4 text-amber-600" />
-              <span className="text-sm font-semibold text-amber-800">Order Policies</span>
+              <span className="text-xs md:text-sm font-semibold text-amber-800">Order Policies</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-amber-900 mb-4 md:mb-6">
               Order, Return & Refund Policy
             </h2>
-            <p className="text-lg text-amber-700 mb-8 leading-relaxed">
+            <p className="text-base md:text-lg text-amber-700 mb-6 md:mb-8 leading-relaxed px-4 md:px-0">
               Understanding our policies helps ensure a smooth shopping experience. All our products are freshly prepared and made to order.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 border border-amber-300">
-                <Package className="w-4 h-4 text-green-600" />
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-xs md:text-sm px-4 md:px-0">
+              <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-sm rounded-full px-3 md:px-4 py-2 border border-amber-300">
+                <Package className="w-3 h-3 md:w-4 md:h-4 text-green-600" />
                 <span className="text-amber-800 font-medium">Fresh Products</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 border border-amber-300">
-                <Clock className="w-4 h-4 text-blue-600" />
+              <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-sm rounded-full px-3 md:px-4 py-2 border border-amber-300">
+                <Clock className="w-3 h-3 md:w-4 md:h-4 text-blue-600" />
                 <span className="text-amber-800 font-medium">Made to Order</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 border border-amber-300">
-                <CheckCircle className="w-4 h-4 text-purple-600" />
+              <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-sm rounded-full px-3 md:px-4 py-2 border border-amber-300">
+                <CheckCircle className="w-3 h-3 md:w-4 md:h-4 text-purple-600" />
                 <span className="text-amber-800 font-medium">Quality Assured</span>
               </div>
             </div>
@@ -158,8 +165,8 @@ Hassan Karnataka 573201`,
       </section>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-3 gap-12">
+      <main className="container mx-auto px-4 py-8 md:py-12">
+        <div className="grid lg:grid-cols-3 gap-8 md:gap-12">
           {/* Policy Sections */}
           <div className="lg:col-span-2 space-y-8">
             {policyData.map((section, index) => {
@@ -195,7 +202,7 @@ Hassan Karnataka 573201`,
                   </div>
                   
                   {isExpanded && (
-                    <div className="px-6 pb-6 space-y-4 animate-fadeIn">
+                    <div className="px-4 md:px-6 pb-4 md:pb-6 space-y-4 animate-fadeIn">
                       {section.content.map((item, itemIndex) => (
                         <div key={itemIndex}>
                           {item.type === 'highlight' && (
@@ -268,14 +275,14 @@ Hassan Karnataka 573201`,
             })}
 
             {/* Additional Information */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-amber-200">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-xl border border-amber-200">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
-                  <Video className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+                  <Video className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-amber-900">Important Requirements</h3>
-                  <p className="text-amber-700 text-sm">Essential documentation for returns</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-amber-900">Important Requirements</h3>
+                  <p className="text-amber-700 text-xs md:text-sm">Essential documentation for returns</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
@@ -300,22 +307,38 @@ Hassan Karnataka 573201`,
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-8 space-y-6">
+              {/* Back to Home in Sidebar - Hidden on mobile, shown on desktop */}
+              <div className="hidden lg:block bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 shadow-xl text-white">
+                <div className="text-center">
+                  <Home className="w-8 h-8 mx-auto mb-3 opacity-90" />
+                  <h4 className="text-lg font-bold mb-2">Continue Shopping</h4>
+                  <p className="text-amber-100 text-sm mb-4">Explore our premium spices and coffee collection</p>
+                  <Link to={"/products"}>
+                  <button 
+                    className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg px-4 py-2 font-medium transition-all duration-200 hover:scale-105"
+                  >
+                    Browse Products
+                  </button>
+                  </Link>
+                </div>
+              </div>
+
               {/* Contact Information */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200">
-                <h4 className="text-xl font-bold text-amber-900 mb-4 flex items-center">
-                  <Phone className="w-5 h-5 text-amber-600 mr-2" />
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl border border-amber-200">
+                <h4 className="text-lg md:text-xl font-bold text-amber-900 mb-4 flex items-center">
+                  <Phone className="w-4 h-4 md:w-5 md:h-5 text-amber-600 mr-2" />
                   Contact Support
                 </h4>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                    <Mail className="w-5 h-5 text-green-600" />
-                    <div>
+                    <Mail className="w-4 h-4 md:w-5 md:h-5 text-green-600 flex-shrink-0" />
+                    <div className="min-w-0">
                       <p className="text-sm font-medium text-green-800">Email</p>
-                      <p className="text-xs text-green-600 font-mono">{contactInfo.email}</p>
+                      <p className="text-xs text-green-600 font-mono break-all">{contactInfo.email}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                    <Phone className="w-5 h-5 text-blue-600" />
+                    <Phone className="w-4 h-4 md:w-5 md:h-5 text-blue-600 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium text-blue-800">Phone</p>
                       <p className="text-xs text-blue-600 font-mono">{contactInfo.phone}</p>
@@ -325,8 +348,8 @@ Hassan Karnataka 573201`,
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200">
-                <h4 className="text-xl font-bold text-amber-900 mb-4">Quick Actions</h4>
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl border border-amber-200">
+                <h4 className="text-lg md:text-xl font-bold text-amber-900 mb-4">Quick Actions</h4>
                 <div className="space-y-3">
                   <button className="w-full text-left p-3 bg-amber-50 hover:bg-amber-100 rounded-lg border border-amber-200 transition-colors">
                     <div className="flex items-center space-x-2">
@@ -350,8 +373,8 @@ Hassan Karnataka 573201`,
               </div>
 
               {/* Business Details */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200">
-                <h4 className="text-xl font-bold text-amber-900 mb-4">Business Details</h4>
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl border border-amber-200">
+                <h4 className="text-lg md:text-xl font-bold text-amber-900 mb-4">Business Details</h4>
                 <div className="space-y-4 text-sm">
                   <div>
                     <p className="font-medium text-amber-800 mb-1">Trade Name</p>
@@ -359,11 +382,11 @@ Hassan Karnataka 573201`,
                   </div>
                   <div>
                     <p className="font-medium text-amber-800 mb-1">GST Number</p>
-                    <p className="text-amber-600 font-mono text-xs">{contactInfo.gst}</p>
+                    <p className="text-amber-600 font-mono text-xs break-all">{contactInfo.gst}</p>
                   </div>
                   <div>
                     <p className="font-medium text-amber-800 mb-1 flex items-center">
-                      <MapPin className="w-4 h-4 mr-1" />
+                      <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
                       Address
                     </p>
                     <p className="text-amber-600 text-xs leading-relaxed whitespace-pre-line">

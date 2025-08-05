@@ -13,7 +13,8 @@ import {
   Loader,
   ChevronRight,
   BookOpen,
-  Sparkles
+  Sparkles,
+  RefreshCw
 } from 'lucide-react';
 
 import blogHeroImage from '/src/assets/blog1.jpg';
@@ -27,7 +28,7 @@ const BlogsPage = () => {
   const navigate = useNavigate();
 
   // API Base URL
-  const API_BASE_URL =import.meta.env.VITE_API_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   // Fetch published blogs
   useEffect(() => {
@@ -59,6 +60,14 @@ const BlogsPage = () => {
       setLoading(false);
     }
   };
+
+  //refresh the page
+  const handleRefresh = async () => {
+  setSearchTerm('');
+  setSelectedTag('');
+  await fetchBlogs(); // This will re-fetch blogs and update state
+};
+
 
   // Helper function to get image URL
   const getImageUrl = (imagePath) => {
@@ -237,34 +246,46 @@ const BlogsPage = () => {
       {/* Search and Filter Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-amber-200 p-6 mb-8">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-amber-500 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search articles..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white/90"
-              />
-            </div>
+       <div className="flex flex-col sm:flex-row gap-y-3 gap-x-4">
+  {/* Search */}
+  <div className="relative flex-1 w-full">
+    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-amber-500 w-5 h-5" />
+    <input
+      type="text"
+      placeholder="Search articles..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full pl-10 pr-4 py-3 border border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white/90"
+    />
+  </div>
 
-            {/* Tag Filter */}
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-amber-500 w-5 h-5" />
-              <select
-                value={selectedTag}
-                onChange={(e) => setSelectedTag(e.target.value)}
-                className="pl-10 pr-8 py-3 border border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white/90 min-w-48"
-              >
-                <option value="">All Topics</option>
-                {allTags.map((tag, index) => (
-                  <option key={index} value={tag}>{tag}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+  {/* Filter + Refresh */}
+  <div className="flex w-full sm:w-auto items-center">
+    <div className="relative flex-1 w-full">
+      <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-amber-500 w-5 h-5" />
+      <select
+        value={selectedTag}
+        onChange={(e) => setSelectedTag(e.target.value)}
+        className="w-full pl-10 pr-8 py-3 border border-amber-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white/90 min-w-48"
+      >
+        <option value="">All Topics</option>
+        {allTags.map((tag, index) => (
+          <option key={index} value={tag}>{tag}</option>
+        ))}
+      </select>
+    </div>
+    <button
+      type="button"
+      onClick={handleRefresh}
+      className="ml-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 hover:bg-amber-100 transition-colors flex items-center"
+      title="Refresh Blogs"
+      style={{ height: '44px' }} // keep height in line with input/select
+    >
+      <RefreshCw className="w-5 h-5 text-amber-600" />
+    </button>
+  </div>
+</div>
+
         </div>
 
         {/* Error Message */}

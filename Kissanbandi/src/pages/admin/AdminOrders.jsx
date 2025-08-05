@@ -55,7 +55,8 @@ const AdminOrders = () => {
   const [exportLoading, setExportLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  
+  const [allOrders, setAllOrders] = useState([]);
+
   // Admin notes state
   const [editingNote, setEditingNote] = useState(null);
   const [noteText, setNoteText] = useState('');
@@ -960,43 +961,104 @@ const getIndividualProductGST = (item, orderData) => {
     }
   };
 
-  const loadOrders = useCallback(async (page = currentPage) => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Fetching orders with filters:', { startDate, endDate, filterStatus, page, searchTerm, sortField, sortOrder });
-      
-      const params = {
-        page,
-        limit: ITEMS_PER_PAGE,
-        status: filterStatus,
-        search: searchTerm,
-        sortField,
-        sortOrder,
-        ...(startDate && { startDate: startDate.toISOString() }),
-        ...(endDate && { endDate: endDate.toISOString() })
-      };
+const loadOrders = useCallback(async (page = 1) => {
+  try {
+    setLoading(true);
+    setError(null);
+    console.log('Fetching orders without search filter:', { startDate, endDate, filterStatus, page });
 
-      const response = await ordersApi.getAllOrders(params);
-      console.log('Orders response:', response);
+    // Backend params without search
+    const params = {
+      page: 1,        // always fetch first page to get all or large number of orders
+      limit: 1000,    // fetch a large limit (adjust as needed for full dataset)
+      status: filterStatus,
+      sortField,      // We will ignore backend sorting — sorting frontend
+      sortOrder,
+      ...(startDate && { startDate: startDate.toISOString() }),
+      ...(endDate && { endDate: endDate.toISOString() }),
+    };
 
-      if (!response || !response.orders) {
-        throw new Error('Invalid response format');
-      }
+    const response = await ordersApi.getAllOrders(params);
 
-      setOrders(response.orders);
-      setTotalPages(Math.ceil(response.total / ITEMS_PER_PAGE));
-      setCurrentPage(page);
-      setError(null);
-    } catch (err) {
-      console.error('Error loading orders:', err);
-      setError(err.message || 'Failed to load orders');
-      toast.error('Failed to load orders');
-      setOrders([]);
-    } finally {
-      setLoading(false);
+    if (!response || !response.orders) {
+      throw new Error('Invalid response format');
     }
-  }, [startDate, endDate, filterStatus, searchTerm, sortField, sortOrder]);
+
+    const fetchedOrders = response.orders;
+
+    setAllOrders(fetchedOrders);  // Store full fetched orders
+
+    // Filter and sort orders locally based on current searchTerm and sort states  
+    const filteredOrders = applyLocalSearchSortFilter(fetchedOrders, searchTerm, filterStatus, sortField, sortOrder);
+
+    setOrders(filteredOrders);
+    setTotalPages(Math.ceil(filteredOrders.length / ITEMS_PER_PAGE));
+    setCurrentPage(page);
+    setError(null);
+
+  } catch (err) {
+    console.error('Error loading orders:', err);
+    setError(err.message || 'Failed to load orders');
+    toast.error('Failed to load orders');
+    setOrders([]);
+    setAllOrders([]);
+    setTotalPages(1);
+  } finally {
+    setLoading(false);
+  }
+}, [startDate, endDate, filterStatus, sortField, sortOrder]);
+
+
+const applyLocalSearchSortFilter = (orderList, searchTerm, filterStatus, sortField, sortOrder) => {
+  let filtered = [...orderList];
+
+  // Filter by status if needed
+  if (filterStatus) {
+    filtered = filtered.filter(o => o.status === filterStatus);
+  }
+
+  // Local Search filter by ID, user name, or phone (case-insensitive)
+  if (searchTerm && searchTerm.trim() !== '') {
+    const lowerSearch = searchTerm.trim().toLowerCase();
+    filtered = filtered.filter(o => {
+      const idMatch = o._id.toLowerCase().includes(lowerSearch);
+      const nameMatch = o.user?.name?.toLowerCase().includes(lowerSearch);
+      const phoneMatch = o.user?.phone?.toLowerCase().includes(lowerSearch);
+      return idMatch || nameMatch || phoneMatch;
+    });
+  }
+
+  // Sort based on field and order
+  filtered.sort((a, b) => {
+    let aValue, bValue;
+
+    switch (sortField) {
+      case 'createdAt':
+        aValue = new Date(a.createdAt).getTime();
+        bValue = new Date(b.createdAt).getTime();
+        break;
+      case 'totalAmount':
+        aValue = a.totalAmount || 0;
+        bValue = b.totalAmount || 0;
+        break;
+      case 'user.name':
+        aValue = a.user?.name?.toLowerCase() || '';
+        bValue = b.user?.name?.toLowerCase() || '';
+        break;
+      default:
+        aValue = a[sortField];
+        bValue = b[sortField];
+    }
+
+    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  return filtered;
+};
+
+
 
   const loadOrderStats = useCallback(async () => {
     try {
@@ -1041,11 +1103,10 @@ const getIndividualProductGST = (item, orderData) => {
       setStatsLoading(false);
     }
   }, [startDate, endDate, orders.length]);
+useEffect(() => {
+  loadOrders(1); // always fetch data fresh when filters/date/sort change
+}, [startDate, endDate, filterStatus, sortField, sortOrder]);
 
-  useEffect(() => {
-    loadOrders(1); // Reset to first page when filters change
-    loadOrderStats();
-  }, [startDate, endDate, filterStatus, searchTerm, sortField, sortOrder]);
 
   // Admin note functions
   const handleEditNote = (orderId, currentNote = '') => {
@@ -1153,7 +1214,6 @@ const getIndividualProductGST = (item, orderData) => {
         ...(startDate && { startDate: startDate.toISOString() }),
         ...(endDate && { endDate: endDate.toISOString() }),
         ...(filterStatus && { status: filterStatus }),
-        ...(searchTerm && { search: searchTerm })
       };
 
       const response = await ordersApi.exportOrders(params);
@@ -1220,9 +1280,14 @@ const getIndividualProductGST = (item, orderData) => {
     if (selectedOrders.size === orders.length) {
       setSelectedOrders(new Set());
     } else {
-      setSelectedOrders(new Set(orders.map(order => order._id)));
+      setSelectedOrders(new Set(paginatedOrders.map(order => order._id)));
     }
   };
+
+  const paginatedOrders = useMemo(() => {
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  return orders.slice(start, start + ITEMS_PER_PAGE);
+}, [orders, currentPage]);
 
   const getStatusBadgeClass = useCallback((status) => {
     switch (status?.toLowerCase()) {
@@ -1432,14 +1497,14 @@ const getIndividualProductGST = (item, orderData) => {
         </div>
         <div className="flex space-x-1">
           <button
-            onClick={() => loadOrders(1)}
+  onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1 || loading}
             className="px-2 py-1 text-sm rounded bg-white text-gray-700 hover:bg-amber-50 disabled:bg-gray-100 disabled:text-gray-400 border border-amber-200"
           >
             First
           </button>
           <button
-            onClick={() => loadOrders(currentPage - 1)}
+  onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1 || loading}
             className="px-3 py-1 text-sm rounded bg-white text-gray-700 hover:bg-amber-50 disabled:bg-gray-100 disabled:text-gray-400 border border-amber-200"
           >
@@ -1448,7 +1513,7 @@ const getIndividualProductGST = (item, orderData) => {
           {pages.map(page => (
             <button
               key={page}
-              onClick={() => loadOrders(page)}
+             onClick={() => setCurrentPage(page)}
               className={`px-3 py-1 text-sm rounded border ${
                 currentPage === page 
                   ? 'bg-amber-600 text-white border-amber-600' 
@@ -1459,14 +1524,14 @@ const getIndividualProductGST = (item, orderData) => {
             </button>
           ))}
           <button
-            onClick={() => loadOrders(currentPage + 1)}
+  onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === totalPages || loading}
             className="px-3 py-1 text-sm rounded bg-white text-gray-700 hover:bg-amber-50 disabled:bg-gray-100 disabled:text-gray-400 border border-amber-200"
           >
             Next
           </button>
           <button
-            onClick={() => loadOrders(totalPages)}
+  onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages || loading}
             className="px-2 py-1 text-sm rounded bg-white text-gray-700 hover:bg-amber-50 disabled:bg-gray-100 disabled:text-gray-400 border border-amber-200"
           >
@@ -1490,9 +1555,11 @@ const getIndividualProductGST = (item, orderData) => {
       return null;
     }
 
+    const paginatedOrders = orders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {orders.map((order) => (
+        {paginatedOrders.map((order) => (
           <div key={order._id} className="bg-white rounded-lg shadow-md border border-amber-100 hover:shadow-lg transition-shadow">
             <div className="p-4">
               <div className="flex justify-between items-start mb-3">
@@ -1593,6 +1660,9 @@ const getIndividualProductGST = (item, orderData) => {
   };
 
   // ✅ FIXED: Responsive table without horizontal scroll
+
+
+
   const renderTableView = () => {
     if (!Array.isArray(orders)) {
       return null;
@@ -1600,7 +1670,7 @@ const getIndividualProductGST = (item, orderData) => {
 
     return (
       <div className="space-y-4">
-        {orders.map((order) => (
+        {paginatedOrders.map((order) => (
           <div key={order._id} className="bg-white border border-amber-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
             {/* ✅ Main Order Info - Always visible */}
             <div className="p-4">

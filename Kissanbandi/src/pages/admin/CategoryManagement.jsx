@@ -12,7 +12,7 @@ const CategoryManagementModal = ({ isOpen, onClose }) => {
   const [addingSubcategoryTo, setAddingSubcategoryTo] = useState(null);
 
   // Get API base URL from Vite environment variables
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_URL
 
   // Real API calls with environment variable
   const categoryAPI = {

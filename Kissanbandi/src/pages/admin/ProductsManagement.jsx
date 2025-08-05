@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Search, Plus, Pencil, Trash2, X, Filter, Grid, List, Eye, Package, TrendingUp, AlertCircle, CheckCircle, Slash, Circle, FolderPlus, Image, ImageIcon, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Search, Plus, Pencil, Trash2, X, Filter, Grid, List, Eye, Package, TrendingUp, AlertCircle, CheckCircle, Slash, Circle, FolderPlus, Image, ImageIcon, ArrowLeft, ArrowRight ,RefreshCw} from 'lucide-react';
 import ProductForm from '../../components/ProductForm';
 import CategoryManagementModal from './CategoryManagement';
 import { toast } from 'react-hot-toast';
@@ -79,6 +79,9 @@ const ProductsManagement = () => {
     setCurrentImageIndex(0);
     setShowImageModal(true);
   };
+
+
+
 
   const nextImage = () => {
     if (selectedProductImages && selectedProductImages.images.length > 1) {
@@ -227,6 +230,10 @@ const handleEditProduct = async (productData) => {
     console.error('❌ ProductsManagement: Error after product update:', err);
     // Don't show error toast here since ProductForm handles that
   }
+};
+
+const handleRefresh = async () => {
+   window.location.reload();
 };
 
   const handleToggleProductStatus = async (productId, newStatus) => {
@@ -421,6 +428,14 @@ const handleEditProduct = async (productData) => {
                   </option>
                 ))}
               </select>
+
+               <button
+    onClick={handleRefresh}
+    className="p-2 rounded-xl border border-amber-200 text-amber-700 bg-white hover:bg-amber-100 transition-colors"
+    title="Refresh products"
+  >
+    <RefreshCw className="w-5 h-5" />
+  </button>
 
               <select
                 value={statusFilter}

@@ -896,11 +896,12 @@ exports.getAllOrders = async (req, res) => {
     if (search) {
       const searchRegex = new RegExp(search, 'i');
       query.$or = [
-        { '_id': { $regex: searchRegex } },
         { 'user.name': { $regex: searchRegex } },
         { 'user.email': { $regex: searchRegex } },
         { 'user.phone': { $regex: searchRegex } }
-      ];
+      ]
+
+      
     }
 
     const sortObj = {};

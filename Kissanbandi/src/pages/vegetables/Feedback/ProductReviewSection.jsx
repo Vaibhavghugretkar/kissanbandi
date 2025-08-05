@@ -531,7 +531,7 @@ const VerifiedReviewsSection = ({ productId = null, showProductInfo = false }) =
               <option value="oldest">Oldest First</option>
               <option value="highest">Highest Rating</option>
               <option value="lowest">Lowest Rating</option>
-              <option value="helpful">Most Helpful</option>
+              
             </select>
           </div>
           
@@ -733,7 +733,8 @@ const VerifiedReviewsSection = ({ productId = null, showProductInfo = false }) =
       {/* ✅ FIXED: Image Modal with Smart Image Component */}
       {imageModalOpen && selectedImages.length > 0 && (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
-          <div className="relative max-w-4xl max-h-4xl w-full h-full p-4">
+          <div className="relative w-full h-full p-4 flex items-center justify-center">
+
             <button
               onClick={closeImageModal}
               className="absolute top-4 right-4 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
@@ -760,10 +761,11 @@ const VerifiedReviewsSection = ({ productId = null, showProductInfo = false }) =
 
             <div className="w-full h-full flex items-center justify-center">
               <SmartImage
-                src={selectedImages[currentImageIndex]}
-                alt={`Review image ${currentImageIndex + 1}`}
-                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-              />
+  src={selectedImages[currentImageIndex]}
+  alt={`Review image ${currentImageIndex + 1}`}
+  className="w-auto h-auto max-w-[95vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
+/>
+
             </div>
 
             {selectedImages.length > 1 && (
